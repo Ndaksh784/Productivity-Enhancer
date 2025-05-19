@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="recommendations">
+    <h2>AI-Powered Recommendations</h2>
+    
+    <div class="ai-suggestions">
+        <div class="suggestion-card">
+            <h3><i class="fas fa-calendar-alt"></i> Schedule Optimization</h3>
+            <p id="schedule-rec">Analyze your productivity data to see personalized schedule suggestions.</p>
+            <button onclick="location.href='{{ url_for('productivity') }}'">Get Analysis</button>
+        </div>
+        
+        <div class="suggestion-card">
+            <h3><i class="fas fa-chart-line"></i> Financial Strategy</h3>
+            <p id="finance-rec">Complete your financial profile to receive customized money management tips.</p>
+            <button onclick="location.href='{{ url_for('finance') }}'">Financial Health</button>
+        </div>
+        
+        <div class="suggestion-card">
+            <h3><i class="fas fa-heartbeat"></i> Wellness Tips</h3>
+            <ul id="wellness-tips">
+                <li>Loading wellness recommendations...</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="ai-features">
+        <h3>Smart Assistant Features</h3>
+        <div class="features-grid">
+            <div class="feature">
+                <i class="fas fa-bell"></i>
+                <h4>Spending Alerts</h4>
+                <p>Get notified about unusual spending patterns</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <h4>Time Management</h4>
+                <p>AI-powered schedule optimization</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-piggy-bank"></i>
+                <h4>Savings Goals</h4>
+                <p>Personalized savings recommendations</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-running"></i>
+                <h4>Activity Balance</h4>
+                <p>Work-life balance suggestions</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Generate some generic wellness tips based on dataset averages
+    fetch('/api/get_insights')
+        .then(response => response.json())
+        .then(data => {
+            const tipsList = document.getElementById('wellness-tips');
+            tipsList.innerHTML = '';
+            
+            const tips = [
+                `Average users sleep ${data.common_screen_time} hours - aim for 7-9 hours`,
+                `Take regular breaks from screens every 50 minutes`,
+                `Morning exercise can boost productivity by up to 20%`,
+                `Plan your most important tasks for your peak energy hours`
+            ];
+            
+            tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                tipsList.appendChild(li);
+            });
+        });
+});
+</script>
+{% endblock %}

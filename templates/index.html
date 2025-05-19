@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="stats-overview">
+        <div class="stat-card">
+            <h3>Your Productivity Score</h3>
+            <div class="stat-value" id="prod-score">--</div>
+            <div class="stat-change" id="prod-change">Loading...</div>
+        </div>
+        <div class="stat-card">
+            <h3>Budget Adherence</h3>
+            <div class="stat-value" id="budget-score">--%</div>
+            <div class="stat-change" id="budget-change">Loading...</div>
+        </div>
+        <div class="stat-card">
+            <h3>Daily Screen Time</h3>
+            <div class="stat-value" id="screen-time">-- hrs</div>
+            <div class="stat-change" id="screen-change">Loading...</div>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <button onclick="location.href='{{ url_for('productivity') }}'">
+                <i class="fas fa-tasks"></i> Productivity Analysis
+            </button>
+            <button onclick="location.href='{{ url_for('finance') }}'">
+                <i class="fas fa-wallet"></i> Financial Health
+            </button>
+            <button onclick="location.href='{{ url_for('recommendations') }}'">
+                <i class="fas fa-robot"></i> AI Recommendations
+            </button>
+        </div>
+    </div>
+
+    <div class="recent-activity">
+        <h2>Recent Insights</h2>
+        <ul id="insights-list">
+            <li>Loading insights...</li>
+        </ul>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/get_insights')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('prod-score').textContent = data.avg_productivity;
+            document.getElementById('budget-score').textContent = data.avg_savings.toLocaleString();
+            document.getElementById('screen-time').textContent = data.common_screen_time;
+            
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = '';
+            
+            const insights = [
+                `Average user productivity score: ${data.avg_productivity}`,
+                `Typical daily screen time: ${data.common_screen_time} hours`,
+                `${data.ai_schedule_users} users utilize AI scheduling`,
+                `${data.spending_alert_users} users enable spending alerts`
+            ];
+            
+            insights.forEach(insight => {
+                const li = document.createElement('li');
+                li.textContent = insight;
+                insightsList.appendChild(li);
+            });
+        });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="finance">
+    <h2>Financial Health Analysis</h2>
+    
+    <div class="analysis-form">
+        <form id="finance-form">
+            <div class="form-group">
+                <label for="income">Monthly Income ($)</label>
+                <input type="number" id="income" name="income" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="debt_ratio">Debt-to-Income Ratio (%)</label>
+                <input type="number" step="0.1" id="debt_ratio" name="debt_ratio" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="investments">Investment Portfolio Size ($)</label>
+                <input type="number" id="investments" name="investments" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="credit_score">Credit Score (300-850)</label>
+                <input type="number" id="credit_score" name="credit_score" min="300" max="850" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="monthly_savings">Monthly Savings ($)</label>
+                <input type="number" id="monthly_savings" name="monthly_savings" required>
+            </div>
+            
+            <button type="submit">Analyze Financial Health</button>
+        </form>
+    </div>
+    
+    <div class="results" id="finance-results" style="display: none;">
+        <h3>Your Financial Health Analysis</h3>
+        <div class="score-display">
+            <span>Predicted Budget Adherence:</span>
+            <span class="score-value" id="finance-result-score">--%</span>
+        </div>
+        
+        <div class="recommendations">
+            <h4>Recommendations</h4>
+            <ul id="finance-recommendations"></ul>
+        </div>
+    </div>
+</section>
+
+<script>
+document.getElementById('finance-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        income: parseInt(document.getElementById('income').value),
+        debt_ratio: parseFloat(document.getElementById('debt_ratio').value),
+        investments: parseInt(document.getElementById('investments').value),
+        credit_score: parseInt(document.getElementById('credit_score').value),
+        monthly_savings: parseInt(document.getElementById('monthly_savings').value)
+    };
+    
+    fetch('/api/predict_finance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('finance-result-score').textContent = data.predicted_adherence + '%';
+        
+        const recList = document.getElementById('finance-recommendations');
+        recList.innerHTML = '';
+        
+        if (data.recommendations.length > 0) {
+            data.recommendations.forEach(rec => {
+                const li = document.createElement('li');
+                li.textContent = rec;
+                recList.appendChild(li);
+            });
+        } else {
+            const li = document.createElement('li');
+            li.textContent = "Your financial habits are excellent!";
+            recList.appendChild(li);
+        }
+        
+        document.getElementById('finance-results').style.display = 'block';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+});
+</script>
+{% endblock %}

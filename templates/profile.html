@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="profile">
+    <h2>Your Profile</h2>
+    
+    <div class="profile-content">
+        <div class="profile-info">
+            <div class="avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ai_preferences">AI Assistant Preferences</label>
+                    <select id="ai_preferences" name="ai_preferences">
+                        <option value="balanced">Balanced recommendations</option>
+                        <option value="productivity">Focus on productivity</option>
+                        <option value="finance">Focus on financial health</option>
+                        <option value="wellness">Focus on wellness</option>
+                    </select>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="enable_alerts" name="enable_alerts">
+                    <label for="enable_alerts">Enable spending alerts</label>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="enable_scheduling" name="enable_scheduling">
+                    <label for="enable_scheduling">Enable AI scheduling</label>
+                </div>
+                
+                <button type="submit">Save Profile</button>
+            </form>
+        </div>
+        
+        <div class="stats-summary">
+            <h3>Your Statistics</h3>
+            <div class="stat-item">
+                <span>Productivity Score</span>
+                <span class="stat-value" id="user-prod-score">--</span>
+            </div>
+            <div class="stat-item">
+                <span>Budget Adherence</span>
+                <span class="stat-value" id="user-budget-score">--%</span>
+            </div>
+            <div class="stat-item">
+                <span>AI Recommendations Used</span>
+                <span class="stat-value">12</span>
+            </div>
+            <div class="stat-item">
+                <span>Goals Achieved</span>
+                <span class="stat-value">8/10</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load some sample data
+    document.getElementById('user-prod-score').textContent = '78';
+    document.getElementById('user-budget-score').textContent = '84%';
+    
+    // Form submission
+    document.getElementById('profile-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Profile saved successfully!');
+        // In a real app, you would send this to your backend
+    });
+});
+</script>
+{% endblock %}
