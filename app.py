@@ -8,13 +8,13 @@ import os
 
 app = Flask(__name__)
 
-# Load and preprocess the dataset
+
 df = pd.read_csv('C:\\Users\\ASUS\\OneDrive\\Desktop\\AI ML PBL\\enhanced_productivity_finance_dataset_500_rows.csv')
 
 
-# Prepare data for ML models
+
 def prepare_data():
-    # Productivity prediction
+    
     X_prod = df[['Age', 'Daily Work Hours', 'Daily Leisure Hours', 
                 'Daily Exercise Minutes', 'Daily Sleep Hours', 
                 'Screen Time (hours)', 'Commute Time (hours)']]
